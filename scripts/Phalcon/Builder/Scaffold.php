@@ -220,19 +220,19 @@ class Scaffold extends Component
 
         if ($this->options->get('templateEngine') == 'volt') {
             // View layouts
-            $this->makeLayoutsVolt();
+            //$this->makeLayoutsVolt();
 
             // View index.phtml
-            $this->makeViewVolt('index');
+            $this->makeViewVolt('list');
 
             // View search.phtml
-            $this->makeViewSearchVolt();
+            //$this->makeViewSearchVolt();
 
             // View new.phtml
-            $this->makeViewVolt('new');
+            //$this->makeViewVolt('new');
 
             // View edit.phtml
-            $this->makeViewVolt('edit');
+            $this->makeViewVolt('add');
         } else {
             // View layouts
             $this->makeLayouts();
@@ -469,14 +469,63 @@ class Scaffold extends Component
         $selectDefinition   = $this->options->get('selectDefinition')->toArray();
         $identityField      = $this->options->get('identityField');
 
-        $code = '';
+        /*$code = '';
         foreach ($this->options->get('dataTypes') as $attribute => $dataType) {
             if (($action == 'new' || $action == 'edit') && $attribute == $identityField) {
                 continue;
             }
 
             $code .= $this->makeFieldVolt($attribute, $dataType, $relationField, $selectDefinition);
+        }*/
+if($action=='list'){
+       $code = '                                   <thead>
+                                    <tr>
+';
+        foreach ($this->options->get('dataTypes') as $attribute => $dataType) {
+
+            $code .='                                        <th>'.$attribute.'</th>
+ ';
         }
+    $code .= '                                        <th >操作 </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for info  in data["list"] %}
+                                    <tr>
+';
+        foreach ($this->options->get('dataTypes') as $attribute => $dataType) {
+
+            $code .='                                        <td>{{info.'.$attribute.'}}</td>
+ ';
+        }
+
+      $code .= '                                        <td>
+                                            <div class="ant-row-flex ant-row-flex-center ant-row-flex-middle table-oprator ta-c">
+                                                <a href="/'.$plural.'/add/{{info.id}}" class="btnedit"><img class="cursor-p" title="修改" src="/img/edit.svg" alt=""></a>
+                                                <a href="/'.$plural.'/delete/{{info.id}}" class="btndelete"><img class="cursor-p" alt="删除" src="/img/delete.svg"></a>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
+                                    </tbody>';
+
+        }else{/// begin add form
+            foreach ($this->options->get('dataTypes') as $attribute => $dataType) {
+                if (($action == 'new' || $action == 'edit') && $attribute == $identityField) {
+                    continue;
+                }
+                if($attribute=="id"){continue;}
+                $code .="                           <tr>
+                               <td class=\"tdleft\">".$attribute."：</td>
+                               <td><input type=\"text\" name=\"".$attribute."\" value=\"{{mod.".$attribute."}}\"> </td>
+                           </tr>
+";
+
+                //$code .=$this->_makeFieldVolt($attribute, $dataType, $relationField, $selectDefinition);
+            }
+        }
+        
 
         return $code;
     }
