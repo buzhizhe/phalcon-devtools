@@ -6,221 +6,79 @@ $useFullyQualifiedModelName$
 
 class $className$Controller extends ControllerBase
 {
-    /**
-     * Index action
-     */
     public function indexAction()
     {
-        $this->persistent->parameters = null;
-    }
-
-    /**
-     * Searches for $plural$
-     */
-    public function searchAction()
-    {
-        $numberPage = 1;
-        if ($this->request->isPost()) {
-            $query = Criteria::fromInput($this->di, '$fullyQualifiedModelName$', $_POST);
-            $this->persistent->parameters = $query->getParams();
-        } else {
-            $numberPage = $this->request->getQuery("page", "int");
-        }
-
-        $parameters = $this->persistent->parameters;
-        if (!is_array($parameters)) {
-            $parameters = [];
-        }
-        $parameters["order"] = "$pk$";
-
-        $pluralVar$ = $className$::find($parameters);
-        if (count($pluralVar$) == 0) {
-            $this->flash->notice("The search did not find any $plural$");
-
-            $this->dispatcher->forward([
-                "controller" => "$plural$",
-                "action" => "index"
-            ]);
-
-            return;
-        }
-
-        $paginator = new Paginator([
-            'data' => $pluralVar$,
-            'limit'=> 10,
-            'page' => $numberPage
-        ]);
-
-        $this->view->page = $paginator->getPaginate();
-    }
-
-    /**
-     * Displays the creation form
-     */
-    public function newAction()
-    {
-
-    }
-
-    /**
-     * Edits a $singular$
-     *
-     * @param string $pkVar$
-     */
-    public function editAction($pkVar$)
-    {
-        if (!$this->request->isPost()) {
-
-            $singularVar$ = $className$::findFirstBy$pk$($pkVar$);
-            if (!$singularVar$) {
-                $this->flash->error("$singular$ was not found");
-
-                $this->dispatcher->forward([
-                    'controller' => "$plural$",
-                    'action' => 'index'
-                ]);
-
-                return;
-            }
-
-            $this->view->$pk$ = $singularVar$->$pkGet$;
-
-            $assignTagDefaults$
-        }
-    }
-
-    /**
-     * Creates a new $singular$
-     */
-    public function createAction()
-    {
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "$plural$",
-                'action' => 'index'
-            ]);
-
-            return;
-        }
-
-        $singularVar$ = new $className$();
-        $assignInputFromRequestCreate$
-
-        if (!$singularVar$->save()) {
-            foreach ($singularVar$->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            $this->dispatcher->forward([
-                'controller' => "$plural$",
-                'action' => 'new'
-            ]);
-
-            return;
-        }
-
-        $this->flash->success("$singular$ was created successfully");
-
         $this->dispatcher->forward([
-            'controller' => "$plural$",
-            'action' => 'index'
+            "controller" => "$className$",
+            "action" => "list"
         ]);
     }
 
-    /**
-     * Saves a $singular$ edited
-     *
-     */
-    public function saveAction()
+    //列表查询
+    public function listAction()
     {
-
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "$plural$",
-                'action' => 'index'
-            ]);
-
-            return;
+        //查询条件
+        $str_where="1=1";
+        if(!$this->request->isPost()){
+            $data["post"]["pageindex"] = 1;
+            $data["post"]["pagesize"] = 10;
+            $data["post"]["realname"]="";
+        }else{
+            $data["post"] = $this->request->getPost();
+            /*if(!empty($data["post"]["realname"])){
+                $str_where.=" and realname like '%".$data["post"]["realname"]."%'";
+            }*/
         }
+        $cond["conditions"]=$str_where;
 
-        $pkVar$ = $this->request->getPost("$pk$");
-        $singularVar$ = $className$::findFirstBy$pk$($pkVar$);
+        //统计总数用于分页
+        $reoordcount =$className$::find($cond)->count();
+        $data["post"]["reoordcount"]=$reoordcount;
 
-        if (!$singularVar$) {
-            $this->flash->error("$singular$ does not exist " . $pkVar$);
+        //当前页记录
+        $offset = ($data["post"]["pageindex"]-1) * $data["post"]["pagesize"];
+        $cond["limit"]= array("number" => $data["post"]["pagesize"], "offset" => $offset);
+        $cond["order"]="id desc";
+        $data['list'] =$className$::find($cond );
 
-            $this->dispatcher->forward([
-                'controller' => "$plural$",
-                'action' => 'index'
-            ]);
-
-            return;
-        }
-
-        $assignInputFromRequestUpdate$
-
-        if (!$singularVar$->save()) {
-
-            foreach ($singularVar$->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            $this->dispatcher->forward([
-                'controller' => "$plural$",
-                'action' => 'edit',
-                'params' => [$singularVar$->$pkGet$]
-            ]);
-
-            return;
-        }
-
-        $this->flash->success("$singular$ was updated successfully");
-
-        $this->dispatcher->forward([
-            'controller' => "$plural$",
-            'action' => 'index'
-        ]);
+        //传值给view
+        $this->view->data = $data;
     }
 
-    /**
-     * Deletes a $singular$
-     *
-     * @param string $pkVar$
-     */
-    public function deleteAction($pkVar$)
+    //添加
+    public function addAction($id=0)
     {
-        $singularVar$ = $className$::findFirstBy$pk$($pkVar$);
-        if (!$singularVar$) {
-            $this->flash->error("$singular$ was not found");
-
-            $this->dispatcher->forward([
-                'controller' => "$plural$",
-                'action' => 'index'
-            ]);
-
-            return;
+        $model = new $className$();
+        if($id>0){
+            $model=$model::findFirst("id=".$id);
         }
+        //$model->status=1;
 
-        if (!$singularVar$->delete()) {
+        if($this->request->isPost()){
+            $post = $this->request->getPost();
+            $model->assign($post);
 
-            foreach ($singularVar$->getMessages() as $message) {
-                $this->flash->error($message);
+            if($model->save() === false){
+                $message = $model->getMessages();
+                self::error($message);
+            }else{
+                self::success("reload");
             }
+          }
 
-            $this->dispatcher->forward([
-                'controller' => "$plural$",
-                'action' => 'search'
-            ]);
-
-            return;
-        }
-
-        $this->flash->success("$singular$ was deleted successfully");
-
-        $this->dispatcher->forward([
-            'controller' => "$plural$",
-            'action' => "index"
-        ]);
+        $this->view->mod = $model;
     }
 
+    //删除
+   public  function  deleteAction($id=0)
+   {
+        if($id>0){
+            $model = new $className$();
+            $da=$model::findFirst("id=".$id);
+            //print_r($da->ToArray());
+            $da->delete();
+            echo "success";
+            exit();
+        }
+    } 
 }
