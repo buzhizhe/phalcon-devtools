@@ -468,6 +468,7 @@ class Scaffold extends Component
         $autocompleteFields = $this->options->get('autocompleteFields');
         $selectDefinition   = $this->options->get('selectDefinition')->toArray();
         $identityField      = $this->options->get('identityField');
+        $plural=$this->options->get('className');
 
         /*$code = '';
         foreach ($this->options->get('dataTypes') as $attribute => $dataType) {
@@ -478,37 +479,36 @@ class Scaffold extends Component
             $code .= $this->makeFieldVolt($attribute, $dataType, $relationField, $selectDefinition);
         }*/
 if($action=='list'){
-       $code = '                                   <thead>
-                                    <tr>
+       $code = '                            <thead>
+                            <tr>
 ';
         foreach ($this->options->get('dataTypes') as $attribute => $dataType) {
 
-            $code .='                                        <th>'.$attribute.'</th>
+            $code .='                                <th>'.$attribute.'</th>
  ';
         }
-    $code .= '                                        <th >操作 </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
+    $code .= '                                <th >操作 </th>
+                            </tr>
+                            </thead>
+                            <tbody>
                                     {% for info  in data["list"] %}
                                     <tr>
 ';
         foreach ($this->options->get('dataTypes') as $attribute => $dataType) {
 
-            $code .='                                        <td>{{info.'.$attribute.'}}</td>
+            $code .='                                <td>{{info.'.$attribute.'}}</td>
  ';
         }
-
-      $code .= '                                        <td>
-                                            <div class="ant-row-flex ant-row-flex-center ant-row-flex-middle table-oprator ta-c">
-                                                <a href="/'.$plural.'/add/{{info.id}}" class="btnedit"><img class="cursor-p" title="修改" src="/img/edit.svg" alt=""></a>
-                                                <a href="/'.$plural.'/delete/{{info.id}}" class="btndelete"><img class="cursor-p" alt="删除" src="/img/delete.svg"></a>
-                                        </div>
-                                        </td>
-                                    </tr>
+      $code .= '                                 <td>
+                                    <div class="ant-row-flex ant-row-flex-center ant-row-flex-middle table-oprator ta-c">
+                                        <a href="/'.$plural.'/add/{{info.id}}" class="btnedit"><i class="fa fa-pencil" title="修改"></i></a>
+                                        <a href="/'.$plural.'/delete/{{info.id}}" class="btndelete"><i class="fa fa-trash" title="删除"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
                                     {% endfor %}
 
-                                    </tbody>';
+                            </tbody>';
 
         }else{/// begin add form
             foreach ($this->options->get('dataTypes') as $attribute => $dataType) {
@@ -516,12 +516,11 @@ if($action=='list'){
                     continue;
                 }
                 if($attribute=="id"){continue;}
-                $code .="                           <tr>
-                               <td class=\"tdleft\">".$attribute."：</td>
-                               <td><input type=\"text\" name=\"".$attribute."\" value=\"{{mod.".$attribute."}}\"> </td>
-                           </tr>
+                $code.="                            <div class=\"form-group\">
+                                <label for=\"".$attribute."\">".$attribute."</label>
+                                <input type=\"text\" name=\"".$attribute."\" class=\"form-control\" placeholder=\"{{mod.".$attribute."}}\" value=\"{{mod.".$attribute."}}\">
+                            </div>
 ";
-
                 //$code .=$this->_makeFieldVolt($attribute, $dataType, $relationField, $selectDefinition);
             }
         }

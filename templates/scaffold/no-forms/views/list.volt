@@ -1,55 +1,80 @@
-<!-- 面包屑导航 -->
-<ul class="breadcrumb">
-    <li><i class="fa fa-map-marker"></i></li>
-    <li class="text-muted">后台</li><li class="text-muted">$plural$</li>
-</ul>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            $plural$
+            <!--<small>advanced tables</small>-->
+        </h1>
+        <!--<ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Tables</a></li>
+            <li class="active">Data tables</li>
+        </ol>-->
+    </section>
 
-<!-- 主体内容区域 -->
-<div class="tab-content ct-tab-content">
-
-    <div class="panel-body">
-        <div class="builder listbuilder-box">
-
-
-            <!-- 查询表单 -->
-            <div class="builder-toolbar">
-                <div class="row querydiv">
-                    <form class="form" id="formquery" method="post" action="">
-                        <div class="form-group">
-                            <label>条件：</label>
-                            <label><input name="id" value="{{data['post']['id']}}"  /></label>
-
-                            <label>
-                                <input type="hidden" id="pageindex" name="pageindex" value="{{data['post']['pageindex']}}">
-                                <input type="hidden" id="pagesize" name="pagesize"  value="{{data['post']['pagesize']}}">
-                                <button id="btnquery" type="button" class="btn btn-primary ">查询</button>
-                                <button id="btnadd" type="button" class="btn btn-warning ">添加</button>
-                            </label>
-                        </div>
-                    </form>
-                </div>
+    <!-- Main content -->
+    <section class="content">
+        <!-- 查询表单 -->
+        <div class="builder-toolbar">
+            <div class="row querydiv">
             </div>
+        </div>
 
-            <!-- 数据列表 -->
-            <div class="builder-container">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="builder-table">
-                            <div class="panel panel-default table-responsive">
-                                <table class="table table-bordered table-striped table-hover">
-                                    $captureFields$
-                                </table>
-                            </div>
 
-                        </div>
+        <!--<div class="box-header with-border">
+            <h3 class="box-title">Different Width</h3>
+        </div>-->
+        <div class="box box-body" style="margin-bottom: 0px;">
+
+            <form class="form" id="formquery" method="post" action="">
+
+                <label>条件：</label>
+                <label><input name="id" class="form-control autowidth" value=""  /></label>
+                <label>条件：</label>
+                <label><input name="id" class="form-control autowidth" value=""  /></label>
+
+
+                <label>
+                    <input type="hidden" id="pageindex" name="pageindex" value="{{data['post']['pageindex']}}">
+                    <input type="hidden" id="pagesize" name="pagesize"  value="{{data['post']['pagesize']}}">
+                    <button id="btnquery" type="button" class="btn btn-primary ">查询</button>
+                    <button id="btnadd" type="button" class="btn btn-warning ">添加</button>
+                </label>
+
+            </form>
+
+
+        </div>
+        <!-- /.box-body -->
+
+
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div class="box" style="border-top: 1px solid #d2d6de;">
+
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="example1" class="table table-bordered table-striped table-hover">
+ $captureFields$
+                        </table>
                     </div>
+                    <!-- /.box-body -->
                 </div>
+                <!-- /.box -->
             </div>
-
-            <!-- 分页 -->
-            <div style="width: 100%;text-align: center;">
-                <div id='page'></div>
-            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- 分页 -->
+        <div style="width: 100%;text-align: center;">
+            <div id='page'></div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
 <script>
     $(document).ready(function() {
         /*分页*/
@@ -57,17 +82,20 @@
 
         /*添加按钮*/
         $("#btnadd").click(function(){
-            openLayer("/$plural$/add/0");
+            openLayer("/$plural$/add/0","添加");
         });
         /*修改按钮*/
         $(".btnedit").click(function(){
-            var u=$(this).context.attributes.href.value;
-            openLayer(u);
+            var u=$(this)[0].attributes.href.value;
+            //alert(u);
+            openLayer(u,"修改");
             return false;
         });
         /*删除按钮*/
         $(".btndelete").click(function(){
-            var u=$(this).context.attributes.href.value;
+            var u=$(this)[0].attributes.href.value;
+            //console.log($(this)[0].attributes.href.value);
+            //return false;
             if(confirm("确定要删除此记录吗？删除后不可恢复！")){
                 openLayer(u);
             }
@@ -76,9 +104,5 @@
     });
 </script>
 
-        </div>
 
-    </div>
-
-</div>
 

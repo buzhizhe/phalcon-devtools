@@ -40,6 +40,7 @@ class $className$Controller extends ControllerBase
         $cond["limit"]= array("number" => $data["post"]["pagesize"], "offset" => $offset);
         $cond["order"]="id desc";
         $data['list'] =$className$::find($cond );
+        $data["inlayer"]="0";
 
         //传值给view
         $this->view->data = $data;
@@ -66,6 +67,8 @@ class $className$Controller extends ControllerBase
             }
           }
 
+        $data["inlayer"]="1";
+        $this->view->data = $data;
         $this->view->mod = $model;
     }
 

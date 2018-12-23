@@ -1,50 +1,59 @@
-<!-- 面包屑导航 -->
-<ul class="breadcrumb">
-    <li><i class="fa fa-map-marker"></i></li>
-    <li class="text-muted">系统</li><li class="text-muted">$plural$</li>
-</ul>
+<!-- Content Wrapper. Contains page content -->
+<div class="" style="background-color: white; height: 100%;">
+    <!-- Content Header (Page header) -->
 
-<!-- 主体内容区域 -->
-<div class="tab-content ct-tab-content">
+    <!-- Main content -->
+    <section class="content">
+        <!--<div class="box-header with-border">
+            <h3 class="box-title">Different Width</h3>
+        </div>-->
 
-    <div class="panel-body">
-        <div class="builder listbuilder-box">
 
-            <!-- 数据列表 -->
-            <div class="builder-container">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <form action="" method="post">
-                        <table class="table table-bordered table-striped table-hover tblform">
-                            <thead>
-                            <th colspan="2">
-                                $plural$修改
-                            </th>
-                            </thead>
-                           <tbody>
-$captureFields$
-                           </tbody>
-                        </table>
-                        <div class="divformsubmit">
-                            <input type="text" name="id" value="{{mod.id}}">
-                            <input type="submit" class="btnquery" id="btnquery" value="提交" >
-                        </div>
-
-                        </form>
-                    </div>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="box-header with-border">
+                    <h3 class="box-title">$plural$</h3>
                 </div>
+                <div class="box box-primary">
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" action="/$plural$/add" method="post">
+                        <div class="box-body">
+ $captureFields$
+                            <!--<div class="checkbox">
+                                <label>
+                                    <input type="checkbox"> Check me out
+                                </label>
+                            </div>-->
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer"><input type="hidden" name="id"  value="{{mod.id}}">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+
+
             </div>
-
-
-            <script>
-                $(document).ready(function() {
-
-                });
-            </script>
+            <!-- /.col -->
         </div>
-
-    </div>
-
+        <!-- /.row -->
+        <!-- 分页 -->
+        <div style="width: 100%;text-align: center;">
+            <div id='page'></div>
+        </div>
+    </section>
+    <!-- /.content -->
 </div>
+<!-- /.content-wrapper -->
+<script>
+    $(document).ready(function() {
+
+    });
+</script>
+
 
 
