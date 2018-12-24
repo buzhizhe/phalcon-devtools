@@ -47,7 +47,7 @@ class $className$Controller extends ControllerBase
     }
 
     //添加
-    public function addAction($id=0)
+    public function addAction($id=0,$inlayer=1)
     {
         $model = new $className$();
         if($id>0){
@@ -67,7 +67,7 @@ class $className$Controller extends ControllerBase
             }
           }
 
-        $data["inlayer"]="1";
+        $data["inlayer"]=$inlayer;
         $this->view->data = $data;
         $this->view->mod = $model;
     }

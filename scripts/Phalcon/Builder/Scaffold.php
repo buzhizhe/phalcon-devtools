@@ -516,7 +516,7 @@ if($action=='list'){
                     continue;
                 }
                 if($attribute=="id"){continue;}
-                $code.="                            <div class=\"form-group\">
+                $code="                            <div class=\"form-group\">
                                 <label for=\"".$attribute."\">".$attribute."</label>
                                 <input type=\"text\" name=\"".$attribute."\" class=\"form-control\" placeholder=\"{{mod.".$attribute."}}\" value=\"{{mod.".$attribute."}}\">
                             </div>
